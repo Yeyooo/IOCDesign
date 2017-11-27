@@ -190,17 +190,17 @@
         $(document).ready(function(){
           //$('[data-toggle="popover"]').popover();
           $('.openBtn').on('click',function(){
-            //if (this.id=="buttonArticulo"){
+            if (this.id=="buttonArticulo"){
               var cadena = 'getContentArticulo.php?id=' + this.dataset.linkid ;
               $('.modal-body').load(cadena,function(){
                 $('#articuloModal').modal({show:true});
               });
-            /*}else if(this.id=="buttonContacto"){
+            }else if(this.id=="buttonContacto"){
               var cadena = 'getContentContacto.php';
               $('.modal-body').load(cadena,function(){
                 $('#contactoModal').modal({show:true});
               });
-            }*/
+            }
           });
         });
     </script>
