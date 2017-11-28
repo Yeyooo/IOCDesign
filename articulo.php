@@ -53,8 +53,9 @@ function cantidadArticulos($conn){
               <ul>
                 <li><a href="index.php"><img src="Iconos/home.png" height="25" width="25">Home</a></li>
                 <li><a href="catalogo.php"><img src="Iconos/catalogo.png">Catálogo</a></li>
-                <li class="current"><a href="articulo.html"><img src="Iconos/articulos.png">Artículos</a></li>
+                <li class="current"><a href="articulo.php"><img src="Iconos/articulos.png">Artículos</a></li>
                 <li><a href="videos.php"><img src="Iconos/video.png">Videos</a></li>
+                <li><a href="tutoriales.php"><img src="Iconos/video.png">Tutoriales</a></li>
                 <li><a id="buttonContacto" class ="openBtn" data-target="#contactoModal" data-toggle="modal" data-container="body" data-toggle="popover"><img src="Iconos/contacto.png">Contacto</a></li>
               </ul>
             </nav>
@@ -208,8 +209,8 @@ function cantidadArticulos($conn){
       	     			  <button class="btn btn-primary" data-dismiss="modal" align="center">Close</button>
           				  <a class="fb-share-button" href="http://192.168.223.5/Plantilla_proyecto/getContentCatalogo.php?id=2"
                     data-layout="button"></a>
-                    <a class="twitter-share-button" href="https://twitter.com/share"
-                    data-size = "large" data-text = "Holi" data-url = "www.google.cl"> Tweet</a>
+                      <a class="twitter-share-button" href="https://twitter.com/share"
+                    data-size = "large" data-text = "Holi" data-url = "www.google.cl" target= "_blank" onclick="window.open(this.href,this.target,'width=720,height=400')"> Tweet</a>
                 </div>
         		</div>
       	</div>
