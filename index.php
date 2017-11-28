@@ -175,10 +175,10 @@
 		                    if ($contador==0){
 		                        echo "<tr>";
 		                    }
-		                    echo "<td>
+		                    echo "<td style='text-align:center';>
 		                         	<img class=\"btn btn-secondary openBtn\" src=\"\" data-youtube-id=\"".$fila['url']."\" id=\"video".$fila['id_video']."\" width=\"300\" height=\"300\" data-target=\"#videoModal\" data-toggle=\"modal\" data-linkid=\"".$fila['id_video']."\">
 				                    <script> $(\"#video".$fila['id_video']."\").youtubeCoverPhoto({useMaxRes: false});</script>
-				                    <p><b>Titulo: ".$fila['titulo']."</b></p>
+				                    <p><b>".$fila['titulo']."</b></p>
 				                    <p>Lugar: ".$fila['lugar']."</p>
 				                    <p>Fecha: ".$fila['fecha']."</p>
 				                    <p>Estado: .... </p>
@@ -223,11 +223,11 @@
 		                    if ($contador==0){
 		                        echo "<tr>";
 		                    }
-		                    echo "<td>
+		                    echo "<td style='text-align:center';>
 		                            	<button type=\"button\" id=\"buttonArticulo\" class=\"btn btn-secondary openBtn\" data-target=\"#articuloModal\" data-toggle=\"modal\" data-container=\"body\"  data-placement=\"bottom\"  data-linkid=\"".$fila['id']."\">
 		                                        <img src='Articulos/".$fila['url']."' width=\"300\" height=\"300\">
 		                                </button>
-		                                <p><b>Titulo: ".$fila['titulo']."</b></p>
+		                                <p><b>".$fila['titulo']."</b></p>
 		                            </td>";
 		                    $contador = $contador + 1;
 		                    if ($contador==3){

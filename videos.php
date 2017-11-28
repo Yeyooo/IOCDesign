@@ -9,6 +9,24 @@
     print "¡Error!: " . $e->getMessage() . "<br/>";
     die();
   }
+  
+function videos($conn,$init,$page_size){
+	$consulta_videos = "SELECT v.id_video, w.titulo, v.titulo, w.descripcion, fecha, lugar, url FROM workshop w, video v, video_es_workshop vw WHERE w.id_workshop = vw.id_workshop AND vw.id_video = v.id_video LIMIT :init, :size";
+	//$consulta_videos = "SELECT id_video,titulo, url FROM video LIMIT :init, :size;";
+	$stm = $conn->prepare($consulta_videos);
+	$stm->bindParam(':init', $init, PDO::PARAM_INT);
+	$stm->bindParam(':size', $page_size, PDO::PARAM_INT);
+	$stm->execute();
+	return $stm;
+	}
+
+function cantidadVideos($conn){
+	$consulta_videos = "SELECT * FROM video";
+	$stm = $conn->prepare($consulta_videos);
+	$stm->execute();
+	$cantidad_videos = $stm->rowCount();
+	return $cantidad_videos;
+	} 
 ?>
 
 <!doctype html>
@@ -85,7 +103,18 @@
       <br/>
       <br/>
           <?php 
-                $sentencia = $conn->prepare("SELECT v.id_video, w.titulo, v.titulo, w.descripcion, fecha, lugar, url FROM workshop w, video v, video_es_workshop vw WHERE w.id_workshop = vw.id_workshop AND vw.id_video = v.id_video");
+                $cantidad_videos = cantidadVideos($conn);
+				$tamano_pagina = 9; //cantidad de productos a mostrar
+				if(isset($_GET['pages'])){
+					$page = $_GET['pages'];
+					$init = ($page-1)*$tamano_pagina;				
+				}else{
+					$init = 0;
+					$page = 1;				
+				}
+				//total de paginas a mostrar
+				$total_pages = ceil($cantidad_videos/$tamano_pagina);					
+				$sentencia = videos($conn,$init,$tamano_pagina);
           ?>
 
       <center>
@@ -98,11 +127,11 @@
                           if ($contador==0){
                               echo "<tr>";
                           }
-                          echo "<td>";
+                          echo "<td style='text-align:center';>";
                                
                           echo "  <img class=\"btn btn-secondary openBtn\" src=\"\" data-youtube-id=\"".$fila['url']."\" id=\"video".$fila['id_video']."\" width=\"300\" height=\"300\" data-target=\"#videoModal\" data-toggle=\"modal\" data-container=\"body\" data-linkid=\"".$fila['id_video']."\">";
                           echo "<script> $(\"#video".$fila['id_video']."\").youtubeCoverPhoto({useMaxRes: false});</script>";
-                          echo "<p><b>Titulo: ".$fila['titulo']."</b></p>";
+                          echo "<p><b>".$fila['titulo']."</b></p>";
                           echo "<p>Lugar: ".$fila['lugar']."</p>";
                           echo "<p>Fecha: ".$fila['fecha']."</p>";
                           echo "<p>Estado: .... </p>";
@@ -119,6 +148,37 @@
           </div>
       </center>   
 
+  
+    <div>
+	<center>
+		<table>
+		<?php
+			echo "<tr>";			
+				if($total_pages > 1){
+					if($page != 1){
+						echo '<a href=" '. 'videos.php?pages='.($page - 1).'"> Anterior </a>';
+					}
+					for($i=1;$i<=$total_pages;$i++){
+						if($page == $i){
+							echo "$page";
+						}
+						else{
+							echo '<a href=" '. 'videos.php?pages='.($i).'"> '. $i .' </a>';
+						}
+					}
+					if($page != $total_pages){
+						echo '<a href=" '. 'videos.php?pages='.($page + 1).'"> Siguiente </a>';
+					}
+				}			
+			echo "</tr>";
+
+		?>
+		</table>
+	</center>
+	</div>
+	  
+	  
+	  
       <br/>
       <br/>
       <br/>
@@ -156,8 +216,8 @@
                     <button class="btn btn-primary" data-dismiss="modal" align="center">Close</button>
                     <a class="fb-share-button" href="http://192.168.223.5/Plantilla_proyecto/getContentCatalogo.php?id=2"
                     data-layout="button"></a>
-                    <a class="twitter-share-button" href="https://twitter.com/share"
-                    data-size = "large" data-text = "Holi" data-url = "www.google.cl"> Tweet</a>
+                      <a class="twitter-share-button" href="https://twitter.com/share"
+                    data-size = "large" data-text = "Holi" data-url = "www.google.cl" target= "_blank" onclick="window.open(this.href,this.target,'width=720,height=400')"> Tweet</a>
                 </div>
             </div>
         </div>
