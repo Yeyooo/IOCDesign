@@ -216,8 +216,8 @@ function cantidadVideos($conn){
                     <button class="btn btn-primary" data-dismiss="modal" align="center">Close</button>
                     <a class="fb-share-button" href="http://192.168.223.5/Plantilla_proyecto/getContentCatalogo.php?id=2"
                     data-layout="button"></a>
-                    <a class="twitter-share-button" href="https://twitter.com/share"
-                    data-size = "large" data-text = "Holi" data-url = "www.google.cl"> Tweet</a>
+                      <a class="twitter-share-button" href="https://twitter.com/share"
+                    data-size = "large" data-text = "Holi" data-url = "www.google.cl" target= "_blank" onclick="window.open(this.href,this.target,'width=720,height=400')"> Tweet</a>
                 </div>
             </div>
         </div>
