@@ -2,15 +2,9 @@
 $admin = $_POST['admin'];
 $pass = $_POST['pass'];
 
-$usuario_bd = 'invitado3';
-$passwd_bd = 'admin';
-try {
-    $conn = new PDO('mysql:host=localhost;dbname=pagina;charset=utf8', $usuario_bd, $passwd_bd);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-//    print "¡Error!: " . $e->getMessage() . "<br/>";
-    die();
-}
+
+require("conexion.php");
+
 
 $stmt = $conn->prepare("SELECT correo,password FROM usuario_admin WHERE correo = :admin");
 $stmt->bindParam(":admin",$admin);

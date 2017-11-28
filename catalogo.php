@@ -1,14 +1,6 @@
 <!--Conexión con la base de datos-->
 <?php
-  $usuario = "invitado3";
-  $passwd = "admin";
-  try {
-    $conn = new PDO("mysql:host=localhost;dbname=pagina;charset=utf8", $usuario, $passwd);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  } catch (PDOException $e) {
-    print "¡Error!: " . $e->getMessage() . "<br/>";
-    die();
-  }
+require("conexion.php");
  function productos($conn,$init,$page_size){
 	$consulta_productos = "SELECT p.id_producto AS id,c.nombre AS categoria, p.nombre, url, descripcion, precio FROM producto p, imagen i, categoria c WHERE p.id_categoria= c.id_categoria AND p.id_imagen = i.id_imagen LIMIT :init, :size";
 	$stm = $conn->prepare($consulta_productos);
@@ -160,7 +152,7 @@ function cantidadProductos($conn){
                         echo "<td style='text-align:center';>
 
                                 <button type=\"button\" id=\"buttonCatalogo\" class=\"btn btn-secondary openBtn\" data-target=\"#catalogoModal\" data-toggle=\"modal\" data-container=\"body\"  data-placement=\"bottom\"  data-linkid=\"".$fila['id']."\">
-                                      <img src='Productos/".$fila['nombre'].".jpg' width=\"300\" height=\"300\" >
+                                      <img src='Productos/".$fila['url']."' width=\"300\" height=\"300\" >
                                 </button>
                                 <p><b>".$fila['nombre']."</b></p>
                                 <p>Categoria: ".$fila['categoria']."</p>
@@ -186,18 +178,18 @@ function cantidadProductos($conn){
 			echo "<tr>";
 				if($total_pages > 1){
 					if($page != 1){
-						echo '<a href=" '. 'catalogo.php?pages='.($page - 1).'"> Anterior </a>';
+						echo '<a href=" '.'catalogo.php?pages='.($page - 1).'"> Anterior </a>';
 					}
 					for($i=1;$i<=$total_pages;$i++){
 						if($page == $i){
 							echo "$page";
 						}
 						else{
-							echo '<a href=" '. 'catalogo.php?pages='.($i).'"> '. $i .' </a>';
+							echo '<a href=" '.'catalogo.php?pages='.($i).'"> '. $i .' </a>';
 						}
 					}
 					if($page != $total_pages){
-						echo '<a href=" '. 'catalogo.php?pages='.($page + 1).'"> Siguiente </a>';
+						echo '<a href=" '.'catalogo.php?pages='.($page + 1).'"> Siguiente </a>';
 					}
 				}
 			echo "</tr>";
