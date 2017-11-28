@@ -110,6 +110,27 @@ function cantidadProductos($conn){
         }
         xmlhttp.open("GET","productoFiltro.php?inicio=1&page_size=2&categoria="+categoriaEntrante);
         xmlhttp.send();
+    }
+    function searchCatalogo(nombreProducto){
+
+      var xmlhttp;
+      if (window.XMLHttpRequest)
+      {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }
+      else
+      {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange=function()
+        {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+          {
+            document.getElementById("Centro").innerHTML=xmlhttp.responseText;
+          }
+        }
+        xmlhttp.open("GET","productoSearch.php?inicio=1&page_size=2&search="+nombreProducto);
+        xmlhttp.send();
     }  
 
   </script>
@@ -129,10 +150,10 @@ function cantidadProductos($conn){
       </div>
       <!--Barra de Búsqueda-->
       <nav class="navbar">
-        <form class="form-inline">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+ 
+          <input id="searchTxt" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick='searchCatalogo(document.getElementById("searchTxt").value)'">Search</button>
+        
         <div>
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
