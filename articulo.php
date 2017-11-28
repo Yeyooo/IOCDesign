@@ -1,4 +1,4 @@
-<!--Conexión con la base de datos-->
+
 <?php
   $usuario = "invitado3";
   $passwd = "admin";
@@ -11,20 +11,19 @@
   }
   
 function articulos($conn,$init,$page_size){
-	$consulta_productos = "SELECT a.id_articulo AS id, titulo, descripcion, texto, url from articulo a, imagen i where a.id_imagen = i.id_imagen LIMIT :init, :size";
-	$stm = $conn->prepare($consulta_productos);
-	$stm->bindParam(':init', $init, PDO::PARAM_INT);
-	$stm->bindParam(':size', $page_size, PDO::PARAM_INT);
-	$stm->execute();
-	return $stm;
+  $consulta_productos = "SELECT a.id_articulo AS id, titulo, descripcion, texto, url from articulo a, imagen i where a.id_imagen = i.id_imagen LIMIT :init, :size";
+  $stm = $conn->prepare($consulta_productos);
+  $stm->bindParam(':init', $init, PDO::PARAM_INT);
+  $stm->bindParam(':size', $page_size, PDO::PARAM_INT);
+  $stm->execute();
+  return $stm;
 }
-
 function cantidadArticulos($conn){
-	$consulta_productos = "SELECT * FROM articulo";
-	$stm = $conn->prepare($consulta_productos);
-	$stm->execute();
-	$cantidad_productos = $stm->rowCount();
-	return $cantidad_productos;
+  $consulta_productos = "SELECT * FROM articulo";
+  $stm = $conn->prepare($consulta_productos);
+  $stm->execute();
+  $cantidad_productos = $stm->rowCount();
+  return $cantidad_productos;
 } 
 ?>
 
@@ -75,27 +74,6 @@ function cantidadArticulos($conn){
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
         <div>
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Categorías
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Categoría 1</a>
-            <a class="dropdown-item" href="#">Categoría 2</a>
-            <a class="dropdown-item" href="#">Categoría 3</a>
-          </div>
-        </div>
-
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Fecha
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Categoría 1</a>
-            <a class="dropdown-item" href="#">Categoría 2</a>
-            <a class="dropdown-item" href="#">Categoría 3</a>
-          </div>
-        </div>
         </div>
 
       </nav>
@@ -105,19 +83,19 @@ function cantidadArticulos($conn){
 
       <br/>
       <br/>
-		  <?php 
+      <?php 
               $cantidad_articulos = cantidadArticulos($conn);
-				$tamano_pagina = 9; //cantidad de productos a mostrar
-				if(isset($_GET['pages'])){
-					$page = $_GET['pages'];
-					$init = ($page-1)*$tamano_pagina;				
-				}else{
-					$init = 0;
-					$page = 1;				
-				}
-				//total de paginas a mostrar
-				$total_pages = ceil($cantidad_articulos/$tamano_pagina);					
-				$sentencia = articulos($conn,$init,$tamano_pagina);
+        $tamano_pagina = 9; //cantidad de productos a mostrar
+        if(isset($_GET['pages'])){
+          $page = $_GET['pages'];
+          $init = ($page-1)*$tamano_pagina;       
+        }else{
+          $init = 0;
+          $page = 1;        
+        }
+        //total de paginas a mostrar
+        $total_pages = ceil($cantidad_articulos/$tamano_pagina);          
+        $sentencia = articulos($conn,$init,$tamano_pagina);
           ?>
       <center>
           <div>
@@ -149,34 +127,33 @@ function cantidadArticulos($conn){
           </div>
       </center>   
 
-	<div>
-	<center>
-		<table>
-		<?php
-			echo "<tr>";
-				if($total_pages > 1){
-					if($page != 1){
-						echo '<a href=" '. 'articulo.php?pages='.($page - 1).'"> Anterior </a>';
-					}
-					for($i=1;$i<=$total_pages;$i++){
-						if($page == $i){
-							echo "$page";
-						}
-						else{
-							echo '<a href=" '. 'articulo.php?pages='.($i).'"> '. $i .' </a>';
-						}
-					}
-					if($page != $total_pages){
-						echo '<a href=" '. 'articulo.php?pages='.($page + 1).'"> Siguiente </a>';
-					}
-				}
-			echo "</tr>";
-
-		?>
-		</table>
-	</center>
-	</div>
-	  
+  <div>
+  <center>
+    <table>
+    <?php
+      echo "<tr>";
+        if($total_pages > 1){
+          if($page != 1){
+            echo '<a href=" '. 'articulo.php?pages='.($page - 1).'"> Anterior </a>';
+          }
+          for($i=1;$i<=$total_pages;$i++){
+            if($page == $i){
+              echo "$page";
+            }
+            else{
+              echo '<a href=" '. 'articulo.php?pages='.($i).'"> '. $i .' </a>';
+            }
+          }
+          if($page != $total_pages){
+            echo '<a href=" '. 'articulo.php?pages='.($page + 1).'"> Siguiente </a>';
+          }
+        }
+      echo "</tr>";
+    ?>
+    </table>
+  </center>
+  </div>
+    
       <br/>
       <br/>
       <br/>
@@ -204,23 +181,23 @@ function cantidadArticulos($conn){
       
 
     <div class="modal" id="articuloModal" tabindex="-1">
-      	<div class="modal-dialog modal-lg">
-        		<div class="modal-content">
-      	    		<div class="modal-header">
-        	    			<button class="close" data-dismiss="modal">&times;</button>
-        	    			<h4 class="modal-title"></h4>	
-      	    		</div>
-      	    		<div class="modal-body">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4> 
+                </div>
+                <div class="modal-body">
                 </div>  
-      	    		<div class="modal-footer">
-      	     			  <button class="btn btn-primary" data-dismiss="modal" align="center">Close</button>
-          				  <a class="fb-share-button" href="http://192.168.223.5/Plantilla_proyecto/getContentCatalogo.php?id=2"
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal" align="center">Close</button>
+                    <a class="fb-share-button" href="http://192.168.223.5/Plantilla_proyecto/getContentCatalogo.php?id=2"
                     data-layout="button"></a>
                       <a class="twitter-share-button" href="https://twitter.com/share"
                     data-size = "large" data-text = "Holi" data-url = "www.google.cl" target= "_blank" onclick="window.open(this.href,this.target,'width=720,height=400')"> Tweet</a>
                 </div>
-        		</div>
-      	</div>
+            </div>
+        </div>
     </div>
 
     <div class="modal" id="contactoModal" tabindex="-1">
@@ -262,7 +239,7 @@ function cantidadArticulos($conn){
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
   <script src="js/bootstrap.js"></script>  
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-	<script src="js/modal.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="js/modal.js"></script>
   </body>
 </html>
