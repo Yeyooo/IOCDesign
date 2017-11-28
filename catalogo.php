@@ -1,14 +1,6 @@
 <!--Conexión con la base de datos-->
 <?php
-  $usuario = "invitado3";
-  $passwd = "admin";
-  try {
-    $conn = new PDO("mysql:host=localhost;dbname=pagina;charset=utf8", $usuario, $passwd);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  } catch (PDOException $e) {
-    print "¡Error!: " . $e->getMessage() . "<br/>";
-    die();
-  }
+require("conexion.php");
  function productos($conn,$init,$page_size){
 	$consulta_productos = "SELECT p.id_producto AS id,c.nombre AS categoria, p.nombre, url, descripcion, precio FROM producto p, imagen i, categoria c WHERE p.id_categoria= c.id_categoria AND p.id_imagen = i.id_imagen LIMIT :init, :size";
 	$stm = $conn->prepare($consulta_productos);
@@ -16,6 +8,25 @@
 	$stm->bindParam(':size', $page_size, PDO::PARAM_INT);
 	$stm->execute();
 	return $stm;
+}
+
+function productosParametrizado($conn,$init,$page_size, $categoria){
+  $consulta_productos = "SELECT p.id_producto AS id,c.nombre AS categoria, p.nombre, url, descripcion, precio FROM producto p, imagen i, categoria c WHERE p.id_categoria= c.id_categoria AND c.nombre =:categoria AND p.id_imagen = i.id_imagen LIMIT :init, :size";
+  $stm = $conn->prepare($consulta_productos);
+  $stm->bindParam(':init', $init, PDO::PARAM_INT);
+  $stm->bindParam(':size', $page_size, PDO::PARAM_INT);
+  $stm->bindParam(':categoria', $categoria);
+  $stm->execute();
+  return $stm;
+}
+
+function cantidadProductosParametrizada($conn, $categoria){
+  $consulta_productos = "SELECT * FROM producto p, categoria c WHERE p.id_categoria = c.id_categoria AND c.nombre = :categoria";
+  $stm = $conn->prepare($consulta_productos);
+  $stm->bindParam(':categoria', $categoria);
+  $stm->execute();
+  $cantidad_productos = $stm->rowCount();
+  return $cantidad_productos;
 }
 
 function cantidadProductos($conn){
@@ -111,6 +122,7 @@ function cantidadProductos($conn){
                 <li class="current"><a href="catalogo.php"><img src="Iconos/catalogo.png">Catálogo</a></li>
                 <li><a href="articulo.php"><img src="Iconos/articulos.png">Artículos</a></li>
                 <li><a href="videos.php"><img src="Iconos/video.png">Videos</a></li>
+                <li><a href="tutoriales.php"><img src="Iconos/video.png">Tutoriales</a></li>
                 <li><a id="buttonContacto" class ="openBtn" data-target="#contactoModal" data-toggle="modal" data-container="body" data-toggle="popover"><img src="Iconos/contacto.png">Contacto</a></li>
               </ul>
             </nav>
@@ -132,6 +144,7 @@ function cantidadProductos($conn){
                 $consulta->execute();
                 while($categorias = $consulta->fetch()){
                   echo "<button class = \"dropdown-item\" onclick=\"cargarCatalogoParametrizado(".$categorias['id_categoria'].")\">".$categorias['nombre']."</button>";
+
                 }
            ?>
           </div>
@@ -156,9 +169,11 @@ function cantidadProductos($conn){
 
       <br/>
       <br/>
+
       <center>
           <div>
               <table id = "Centro">
+
               </table>    
           </div>
 

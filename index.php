@@ -45,7 +45,8 @@
                	<li class="current"><a href="index.php"><img src="Iconos/home.png" height="25" width="25">  Home</a></li>
                 <li><a href="catalogo.php"><img src="Iconos/catalogo.png">Catálogo</a></li>
                 <li><a href="articulo.php"><img src="Iconos/articulos.png">Artículos</a></li>
-                <li><a href="videos.php"><img src="Iconos/video.png">Videos</a></li>
+                <li><a href="videos.php"><img src="Iconos/video.png">Workshops</a></li>
+                <li><a href="tutoriales.php"><img src="Iconos/video.png">Tutoriales</a></li>
                 <li><a id="buttonContacto" class ="openBtn" data-target="#contactoModal" data-toggle="modal" data-container="body" data-toggle="popover"><img src="Iconos/contacto.png">Contacto</a></li>
               </ul>
             </nav>

@@ -1,14 +1,6 @@
 
 <?php
-  $usuario = "invitado3";
-  $passwd = "admin";
-  try {
-    $conn = new PDO("mysql:host=localhost;dbname=pagina;charset=utf8", $usuario, $passwd);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  } catch (PDOException $e) {
-    print "¡Error!: " . $e->getMessage() . "<br/>";
-    die();
-  }
+  require("conexion.php");
   
 function articulos($conn,$init,$page_size){
   $consulta_productos = "SELECT a.id_articulo AS id, titulo, descripcion, texto, url from articulo a, imagen i where a.id_imagen = i.id_imagen LIMIT :init, :size";
@@ -60,8 +52,9 @@ function cantidadArticulos($conn){
               <ul>
                 <li><a href="index.php"><img src="Iconos/home.png" height="25" width="25">Home</a></li>
                 <li><a href="catalogo.php"><img src="Iconos/catalogo.png">Catálogo</a></li>
-                <li class="current"><a href="articulo.html"><img src="Iconos/articulos.png">Artículos</a></li>
+                <li class="current"><a href="articulo.php"><img src="Iconos/articulos.png">Artículos</a></li>
                 <li><a href="videos.php"><img src="Iconos/video.png">Videos</a></li>
+                <li><a href="tutoriales.php"><img src="Iconos/video.png">Tutoriales</a></li>
                 <li><a id="buttonContacto" class ="openBtn" data-target="#contactoModal" data-toggle="modal" data-container="body" data-toggle="popover"><img src="Iconos/contacto.png">Contacto</a></li>
               </ul>
             </nav>
