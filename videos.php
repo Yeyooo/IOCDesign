@@ -42,7 +42,7 @@ function cantidadVideos($conn){
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
     <script src="jquery.youtubecoverphoto.js"></script>
   </head>
-  <body >
+  <body onload = "cargarCatalogoVideos()" >
    <script>
             //SCRIPT DE FB COPIEN DESPUES DE BODY EN CUALQUIER WEA
           (function(d, s, id) {
@@ -53,6 +53,54 @@ function cantidadVideos($conn){
         fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
     </script>
+
+  <script type="text/javascript">
+    
+    function cargarCatalogoVideos(){
+
+      var xmlhttp;
+      if (window.XMLHttpRequest)
+      {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }
+      else
+      {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange=function()
+        {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+          {
+            document.getElementById("Centro").innerHTML=xmlhttp.responseText;
+          }
+        }
+        xmlhttp.open("GET","videoFiltro.php?inicio=1&page_size=2&tiempo=1");
+        xmlhttp.send();
+    }
+
+    function cargarCatalogoVideoParametrizado(categoriaEntrante){
+
+      var xmlhttp;
+      if (window.XMLHttpRequest)
+      {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }
+      else
+      {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange=function()
+        {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+          {
+            document.getElementById("Centro").innerHTML=xmlhttp.responseText;
+          }
+        }
+        xmlhttp.open("GET","videoFiltro.php?inicio=1&page_size=2&tiempo="+categoriaEntrante);
+        xmlhttp.send();
+    }  
+  </script>
+      
       <h1>IOC Design</h1>
 
       <div id="header">
@@ -79,72 +127,37 @@ function cantidadVideos($conn){
             Categorías
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Categoría 1</a>
+            <button class="dropdown-item" href="#">Categoría 1</button>
             <a class="dropdown-item" href="#">Categoría 2</a>
             <a class="dropdown-item" href="#">Categoría 3</a>
+            </div>
           </div>
-        </div>
-
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Fecha
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Categoría 1</a>
-            <a class="dropdown-item" href="#">Categoría 2</a>
-            <a class="dropdown-item" href="#">Categoría 3</a>
-          </div>
-        </div>
         </div>
 
       </nav>
 
-      <h2>Workshops</h2>
+      <h2>WorkShop</h2>
 
       <br/>
       <br/>
           <?php 
-                $cantidad_videos = cantidadVideos($conn);
-				$tamano_pagina = 9; //cantidad de productos a mostrar
-				if(isset($_GET['pages'])){
-					$page = $_GET['pages'];
-					$init = ($page-1)*$tamano_pagina;				
-				}else{
-					$init = 0;
-					$page = 1;				
-				}
-				//total de paginas a mostrar
-				$total_pages = ceil($cantidad_videos/$tamano_pagina);					
-				$sentencia = videos($conn,$init,$tamano_pagina);
+              $cantidad_videos = cantidadVideos($conn);
+      				$tamano_pagina = 9; //cantidad de productos a mostrar
+      				if(isset($_GET['pages'])){
+      					$page = $_GET['pages'];
+      					$init = ($page-1)*$tamano_pagina;				
+      				}else{
+      					$init = 0;
+      					$page = 1;				
+      				}
+      				//total de paginas a mostrar
+      				$total_pages = ceil($cantidad_videos/$tamano_pagina);					
+      				$sentencia = videos($conn,$init,$tamano_pagina);
           ?>
-
       <center>
           <div>
-              <table>
-                  <?php 
-                      $sentencia->execute();
-                      $contador = 0;
-                      while($fila = $sentencia->fetch()){
-                          if ($contador==0){
-                              echo "<tr>";
-                          }
-                          echo "<td style='text-align:center';>";
-                               
-                          echo "  <img class=\"btn btn-secondary openBtn\" src=\"\" data-youtube-id=\"".$fila['url']."\" id=\"video".$fila['id_video']."\" width=\"300\" height=\"300\" data-target=\"#videoModal\" data-toggle=\"modal\" data-container=\"body\" data-linkid=\"".$fila['id_video']."\">";
-                          echo "<script> $(\"#video".$fila['id_video']."\").youtubeCoverPhoto({useMaxRes: false});</script>";
-                          echo "<p><b>".$fila['titulo']."</b></p>";
-                          echo "<p>Lugar: ".$fila['lugar']."</p>";
-                          echo "<p>Fecha: ".$fila['fecha']."</p>";
-                          echo "<p>Estado: .... </p>";
-                          echo "</td>";
-                          $contador = $contador + 1;
-                          if ($contador==3){
-                              $contador = 0;
-                              echo "</tr>";
-                          }
-                      }
-                      $conn = null;
-                  ?>
+              <table id = "Centro">
+                  
               </table>    
           </div>
       </center>   
