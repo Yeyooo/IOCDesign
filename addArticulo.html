@@ -1,0 +1,56 @@
+
+<!DOCTYPE html >
+<html lang="ES-es">
+<head>
+	<title>Añadir Artículo</title>
+	<meta charset="utf-8">
+</head>
+<style>
+p {
+	color:black; width:80%; margin-left:20px;
+}
+
+div{
+	border: 2px solid black;
+	padding: 40px 40px 40px 40px;
+	width: 500px;
+	margin: 10px 100px 100px 400px;
+}
+
+h1{
+	text-align: center;
+	/*color: #ffffff;*/
+	color: black;
+    font-family: Georgia;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+h2{
+	text-align: center;
+	color: black;
+	padding-left: 20px;
+    font-family: Georgia;
+}
+
+</style>
+<body>
+	<br/>
+	<br/>
+	<h1>IOC Design</h1>
+	<br/>
+	<br/>
+	<h2>Agregando Artículo</h2>
+	<div>
+		<form enctype = "multipart/form-data" name="articulo" action="agregar_articulo.php" method="post">
+			<br/>
+			Título: <input type="text" name="titulo"><br/><br/>
+			Descripción: <br/><textarea rows = "5" cols = "70" name = "descripcion"></textarea><br/><br/>
+         	Texto: <br/><textarea rows = "20" cols = "70" name = "texto"></textarea><br/><br/>
+         	Imagen: <input type = "file" name = "foto" /> <br/><br/>
+         	<input type = "submit" name = "submit" value = "Publicar" />			 	
+		</form>
+	</div>
+
+</body>
+</html>
