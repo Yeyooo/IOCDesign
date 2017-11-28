@@ -1,14 +1,6 @@
 <!--Conexión con la base de datos-->
 <?php
-  $usuario = "invitado3";
-  $passwd = "admin";
-  try {
-    $conn = new PDO("mysql:host=localhost;dbname=pagina;charset=utf8", $usuario, $passwd);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  } catch (PDOException $e) {
-    print "¡Error!: " . $e->getMessage() . "<br/>";
-    die();
-  }
+  require("conexion.php");
   
 function articulos($conn,$init,$page_size){
 	$consulta_productos = "SELECT a.id_articulo AS id, titulo, descripcion, texto, url from articulo a, imagen i where a.id_imagen = i.id_imagen LIMIT :init, :size";

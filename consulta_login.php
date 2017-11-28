@@ -2,22 +2,14 @@
 $admin = $_POST['admin'];
 $pass = $_POST['pass'];
 
-$usuario_bd = 'seba';
-$passwd_bd = 'seba123';
-try {
-    $conn = new PDO('mysql:host=localhost;dbname=pagina;charset=utf8', $usuario_bd, $passwd_bd);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-//    print "¡Error!: " . $e->getMessage() . "<br/>";
-    die();
-}
+require("conexion.php");
 
-$stmt = $conn->prepare("SELECT name,password FROM members WHERE name = :admin");
+$stmt = $conn->prepare("SELECT correo,password FROM usuario_admin WHERE correo = :admin");
 $stmt->bindParam(":admin",$admin);
 $stmt->execute();
 $row = $stmt->fetch();
 
-if($admin == $row['name'] && $pass == $row['password']){
+if($admin == $row['correo'] && $pass == $row['password']){
 	//asume un sólo usuario con el id dado
 	session_start();
 	header("location:administrador.php");
