@@ -22,7 +22,7 @@
 	$stmt->bindParam(":imagen",$imagen);
 
 	if($stmt->execute()){
-		$uploaddir = '/usr/share/nginx/html/IOCv2/Productos/';
+		$uploaddir = '/usr/share/nginx/html/IOCDesign-Github/Productos/';
 		$uploadfile = $uploaddir.basename($_FILES['foto']['name']);
 		if(move_uploaded_file($_FILES['foto']['tmp_name'], $uploadfile)){
 		}

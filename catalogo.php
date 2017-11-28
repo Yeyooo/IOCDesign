@@ -1,14 +1,6 @@
 <!--Conexión con la base de datos-->
 <?php
-  $usuario = "invitado3";
-  $passwd = "admin";
-  try {
-    $conn = new PDO("mysql:host=localhost;dbname=pagina;charset=utf8", $usuario, $passwd);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  } catch (PDOException $e) {
-    print "¡Error!: " . $e->getMessage() . "<br/>";
-    die();
-  }
+require("conexion.php");
  function productos($conn,$init,$page_size){
 	$consulta_productos = "SELECT p.id_producto AS id,c.nombre AS categoria, p.nombre, url, descripcion, precio FROM producto p, imagen i, categoria c WHERE p.id_categoria= c.id_categoria AND p.id_imagen = i.id_imagen LIMIT :init, :size";
 	$stm = $conn->prepare($consulta_productos);
@@ -44,6 +36,9 @@ function cantidadProductos($conn){
 	$cantidad_productos = $stm->rowCount();
 	return $cantidad_productos;
 }
+
+
+
 ?>
 
 <!doctype html>
@@ -59,7 +54,7 @@ function cantidadProductos($conn){
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
     <script src="jquery.youtubecoverphoto.js"></script>
   </head>
-  <body>
+  <body onload = "cargarCatalogo()">
     <script>
             //SCRIPT DE FB COPIEN DESPUES DE BODY EN CUALQUIER WEA
           (function(d, s, id) {
@@ -71,7 +66,53 @@ function cantidadProductos($conn){
         }(document, 'script', 'facebook-jssdk'));
     </script>
 
+  <script type="text/javascript">
+    
+    function cargarCatalogo(){
 
+      var xmlhttp;
+      if (window.XMLHttpRequest)
+      {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }
+      else
+      {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange=function()
+        {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+          {
+            document.getElementById("Centro").innerHTML=xmlhttp.responseText;
+          }
+        }
+        xmlhttp.open("GET","paginaTest.php?inicio=1&page_size=2&categoria=0");
+        xmlhttp.send();
+    }
+
+    function cargarCatalogoParametrizado(categoriaEntrante){
+
+      var xmlhttp;
+      if (window.XMLHttpRequest)
+      {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+      }
+      else
+      {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.onreadystatechange=function()
+        {
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+          {
+            document.getElementById("Centro").innerHTML=xmlhttp.responseText;
+          }
+        }
+        xmlhttp.open("GET","paginaTest.php?inicio=1&page_size=2&categoria="+categoriaEntrante);
+        xmlhttp.send();
+    }  
+
+  </script>
       <h1>IOC Design</h1>
 
       <div id="header">
@@ -102,7 +143,8 @@ function cantidadProductos($conn){
                 $consulta = $conn->prepare("SELECT * FROM categoria");
                 $consulta->execute();
                 while($categorias = $consulta->fetch()){
-                  echo "<a class = \"dropdown-item\" value ='".$categorias['nombre']."'  href = \"#\">".$categorias['nombre']." method = post</a>";
+                  echo "<button class = \"dropdown-item\" onclick=\"cargarCatalogoParametrizado(".$categorias['id_categoria'].")\">".$categorias['nombre']."</button>";
+
                 }
            ?>
           </div>
@@ -123,57 +165,15 @@ function cantidadProductos($conn){
       </nav>
 
 
-
-
     <h2>Catálogo</h2>
 
       <br/>
       <br/>
 
-        <?php 
-          //$cantidad_productos = cantidadProductos($conn);
-        $cantidad_productos = cantidadProductosParametrizada($conn,"Flayers");
-			$tamano_pagina = 9; //cantidad de productos a mostrar
-			if(isset($_GET['pages'])){
-				$page = $_GET['pages'];
-				$init = ($page-1)*$tamano_pagina;				
-			}else{
-				$init = 0;
-				$page = 1;				
-			}
-			//total de paginas a mostrar
-			$total_pages = ceil($cantidad_productos/$tamano_pagina);					
-			//$sentencia = productos($conn,$init,$tamano_pagina);
-      $sentencia = productosParametrizado($conn,$init,$tamano_pagina,'Flayers');	  
-        ?>
-
       <center>
           <div>
-              <table>
-                <?php 
-                    $sentencia->execute();
-                    $contador = 0;
-                    while($fila = $sentencia->fetch()){
-                        if ($contador==0){
-                            echo "<tr>";
-                        }
-                        echo "<td style='text-align:center';>
+              <table id = "Centro">
 
-                                <button type=\"button\" id=\"buttonCatalogo\" class=\"btn btn-secondary openBtn\" data-target=\"#catalogoModal\" data-toggle=\"modal\" data-container=\"body\"  data-placement=\"bottom\"  data-linkid=\"".$fila['id']."\">
-                                      <img src='Productos/".$fila['nombre'].".jpg' width=\"300\" height=\"300\" >
-                                </button>
-                                <p><b>".$fila['nombre']."</b></p>
-                                <p>Categoria: ".$fila['categoria']."</p>
-                              </td>";
-
-                        $contador = $contador + 1;
-                        if ($contador==3){
-                            $contador = 0;
-                            echo "</tr>";
-                        }
-                    }
-                    $conn = null;
-                ?>
               </table>    
           </div>
 
@@ -182,27 +182,6 @@ function cantidadProductos($conn){
 	<div>
 	<center>
 		<table>
-		<?php
-			echo "<tr>";
-				if($total_pages > 1){
-					if($page != 1){
-						echo '<a href=" '. 'catalogo.php?pages='.($page - 1).'"> Anterior </a>';
-					}
-					for($i=1;$i<=$total_pages;$i++){
-						if($page == $i){
-							echo "$page";
-						}
-						else{
-							echo '<a href=" '. 'catalogo.php?pages='.($i).'"> '. $i .' </a>';
-						}
-					}
-					if($page != $total_pages){
-						echo '<a href=" '. 'catalogo.php?pages='.($page + 1).'"> Siguiente </a>';
-					}
-				}
-			echo "</tr>";
-
-		?>
 		</table>
 	</center>
 	</div>
@@ -269,8 +248,6 @@ function cantidadProductos($conn){
               </div>
         </div>
     </div>  
-
-
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
