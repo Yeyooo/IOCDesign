@@ -2,12 +2,12 @@
 <?php
 require("conexion.php");
  function productos($conn,$init,$page_size){
-	$consulta_productos = "SELECT p.id_producto AS id,c.nombre AS categoria, p.nombre, url, descripcion, precio FROM producto p, imagen i, categoria c WHERE p.id_categoria= c.id_categoria AND p.id_imagen = i.id_imagen LIMIT :init, :size";
-	$stm = $conn->prepare($consulta_productos);
-	$stm->bindParam(':init', $init, PDO::PARAM_INT);
-	$stm->bindParam(':size', $page_size, PDO::PARAM_INT);
-	$stm->execute();
-	return $stm;
+  $consulta_productos = "SELECT p.id_producto AS id,c.nombre AS categoria, p.nombre, url, descripcion, precio FROM producto p, imagen i, categoria c WHERE p.id_categoria= c.id_categoria AND p.id_imagen = i.id_imagen LIMIT :init, :size";
+  $stm = $conn->prepare($consulta_productos);
+  $stm->bindParam(':init', $init, PDO::PARAM_INT);
+  $stm->bindParam(':size', $page_size, PDO::PARAM_INT);
+  $stm->execute();
+  return $stm;
 }
 
 function productosParametrizado($conn,$init,$page_size, $categoria){
@@ -30,11 +30,11 @@ function cantidadProductosParametrizada($conn, $categoria){
 }
 
 function cantidadProductos($conn){
-	$consulta_productos = "SELECT * FROM producto";
-	$stm = $conn->prepare($consulta_productos);
-	$stm->execute();
-	$cantidad_productos = $stm->rowCount();
-	return $cantidad_productos;
+  $consulta_productos = "SELECT * FROM producto";
+  $stm = $conn->prepare($consulta_productos);
+  $stm->execute();
+  $cantidad_productos = $stm->rowCount();
+  return $cantidad_productos;
 }
 
 
@@ -86,7 +86,7 @@ function cantidadProductos($conn){
             document.getElementById("Centro").innerHTML=xmlhttp.responseText;
           }
         }
-        xmlhttp.open("GET","paginaTest.php?inicio=1&page_size=2&categoria=0");
+        xmlhttp.open("GET","productoFiltro.php?inicio=1&page_size=2&categoria=0");
         xmlhttp.send();
     }
 
@@ -108,7 +108,7 @@ function cantidadProductos($conn){
             document.getElementById("Centro").innerHTML=xmlhttp.responseText;
           }
         }
-        xmlhttp.open("GET","paginaTest.php?inicio=1&page_size=2&categoria="+categoriaEntrante);
+        xmlhttp.open("GET","productoFiltro.php?inicio=1&page_size=2&categoria="+categoriaEntrante);
         xmlhttp.send();
     }  
 
@@ -179,13 +179,13 @@ function cantidadProductos($conn){
 
       </center>   
 
-	<div>
-	<center>
-		<table>
-		</table>
-	</center>
-	</div>
-	  
+  <div>
+  <center>
+    <table>
+    </table>
+  </center>
+  </div>
+    
       <br/>
       <br/>
       <br/>
@@ -212,23 +212,23 @@ function cantidadProductos($conn){
       </footer>
 
     <div class="modal" id="catalogoModal" tabindex="-1">
-      	<div class="modal-dialog modal-lg">
-        		<div class="modal-content">
-      	    		<div class="modal-header">
-        	    			<button class="close" data-dismiss="modal">&times;</button>
-        	    			<h4 class="modal-title"></h4>	
-      	    		</div>
-      	    		<div class="modal-body">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"></h4> 
+                </div>
+                <div class="modal-body">
                 </div> 
-      	    		<div class="modal-footer">
-        	    			<button class="btn btn-primary" data-dismiss="modal" align="center">Close</button>
-            				<a class="fb-share-button" href="http://192.168.223.5/Plantilla_proyecto/getContentCatalogo.php?id=2"
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal" align="center">Close</button>
+                    <a class="fb-share-button" href="http://192.168.223.5/Plantilla_proyecto/getContentCatalogo.php?id=2"
                     data-layout="button"></a>
                     <a class="twitter-share-button" href="https://twitter.com/share"
                     data-size = "large" data-text = "Holi" data-url = "www.google.cl" target= "_blank" onclick="window.open(this.href,this.target,'width=720,height=400')"> Tweet</a>
-          			</div>
-          		</div>
-      	</div>
+                </div>
+              </div>
+        </div>
     </div>
 
 
@@ -273,7 +273,7 @@ function cantidadProductos($conn){
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="js/bootstrap.js"></script>
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  	<script src="js/modal.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="js/modal.js"></script>
   </body>
 </html>
