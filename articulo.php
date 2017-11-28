@@ -9,6 +9,23 @@
     print "¡Error!: " . $e->getMessage() . "<br/>";
     die();
   }
+  
+function articulos($conn,$init,$page_size){
+	$consulta_productos = "SELECT a.id_articulo AS id, titulo, descripcion, texto, url from articulo a, imagen i where a.id_imagen = i.id_imagen LIMIT :init, :size";
+	$stm = $conn->prepare($consulta_productos);
+	$stm->bindParam(':init', $init, PDO::PARAM_INT);
+	$stm->bindParam(':size', $page_size, PDO::PARAM_INT);
+	$stm->execute();
+	return $stm;
+}
+
+function cantidadArticulos($conn){
+	$consulta_productos = "SELECT * FROM articulo";
+	$stm = $conn->prepare($consulta_productos);
+	$stm->execute();
+	$cantidad_productos = $stm->rowCount();
+	return $cantidad_productos;
+} 
 ?>
 
 <!doctype html>
@@ -88,9 +105,19 @@
 
       <br/>
       <br/>
-		      <?php 
-              $sentencia = $conn->prepare("SELECT a.id_articulo AS id, titulo, descripcion, texto, url from articulo a, imagen i where a.id_imagen = i.id_imagen");
-
+		  <?php 
+              $cantidad_articulos = cantidadArticulos($conn);
+				$tamano_pagina = 9; //cantidad de productos a mostrar
+				if(isset($_GET['pages'])){
+					$page = $_GET['pages'];
+					$init = ($page-1)*$tamano_pagina;				
+				}else{
+					$init = 0;
+					$page = 1;				
+				}
+				//total de paginas a mostrar
+				$total_pages = ceil($cantidad_articulos/$tamano_pagina);					
+				$sentencia = articulos($conn,$init,$tamano_pagina);
           ?>
       <center>
           <div>
@@ -102,12 +129,12 @@
                           if ($contador==0){
                               echo "<tr>";
                           }
-                          echo "<td>
+                          echo "<td style='text-align:center';>
                                     <center>
                                         <button type=\"button\" id=\"buttonArticulo\" class=\"btn btn-secondary openBtn\" data-target=\"#articuloModal\" data-toggle=\"modal\" data-container=\"body\"  data-placement=\"bottom\"  data-linkid=\"".$fila['id']."\">
                                             <img src='Articulos/".$fila['url']."' width=\"300\" height=\"300\">
                                         </button>
-                                        <p><b>Titulo: ".$fila['titulo']."</b></p>
+                                        <p><b>".$fila['titulo']."</b></p>
                                     </center>
                                 </td>";
                           $contador = $contador + 1;
@@ -122,6 +149,34 @@
           </div>
       </center>   
 
+	<div>
+	<center>
+		<table>
+		<?php
+			echo "<tr>";
+				if($total_pages > 1){
+					if($page != 1){
+						echo '<a href=" '. 'articulo.php?pages='.($page - 1).'"> Anterior </a>';
+					}
+					for($i=1;$i<=$total_pages;$i++){
+						if($page == $i){
+							echo "$page";
+						}
+						else{
+							echo '<a href=" '. 'articulo.php?pages='.($i).'"> '. $i .' </a>';
+						}
+					}
+					if($page != $total_pages){
+						echo '<a href=" '. 'articulo.php?pages='.($page + 1).'"> Siguiente </a>';
+					}
+				}
+			echo "</tr>";
+
+		?>
+		</table>
+	</center>
+	</div>
+	  
       <br/>
       <br/>
       <br/>
