@@ -52,9 +52,27 @@ function habilitar(value){
 	}
 }
 
-function cargarDatos(value){
+function cargarDatos(id){
 
-
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("Titulo").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","actualizar_video.php?id="+id,true);
+xmlhttp.send();
+}
 
 }
 
@@ -73,14 +91,15 @@ function cargarDatos(value){
 				$index = 1;
 				echo "<select name=\"titulos\">";
 				while($row = $consulta_datos->fetch()){
-					echo "<option onclick = 'cargarDatos(".$index.")'>".$row['titulo']."</option>";		
+					echo "<option onclick = 'cargarDatos(".$index.")'>".$row['titulo']."</option>";	
+					$index = $index + 1;	
 				}
 				echo "</select>";
 				$conn = null;
 			?>
 			<br/>
 			<br/>
-			Título: <input type="text" name="titulo"><br/><br/>
+			Título: <input id="Titulo" type="text" name="titulo"><br/><br/>
 			Descripción: <br/><textarea rows = "5" cols = "70" name = "descripcion"></textarea><br/><br/>
          	Categoría: <select name = "categoria">
             <option value = "Workshop" onclick="habilitar(1)">Workshop</option>
