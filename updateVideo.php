@@ -53,27 +53,51 @@ function habilitar(value){
 }
 
 function cargarDatos(id){
-
-var xmlhttp;
-if (window.XMLHttpRequest)
-  {// code for IE7+, Firefox, Chrome, Opera, Safari
-  xmlhttp=new XMLHttpRequest();
-  }
-else
-  {// code for IE6, IE5
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-xmlhttp.onreadystatechange=function()
-  {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-    document.getElementById("Titulo").innerHTML=xmlhttp.responseText;
-    }
-  }
-xmlhttp.open("GET","actualizar_video.php?id="+id,true);
-xmlhttp.send();
+	
+	cargarTitulo(id);
+	cargarDescripcion(id);
 }
 
+function cargarTitulo(id){
+	var xmlhttp;
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  	xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+	    {
+	    	document.getElementById("Titulo").value=xmlhttp.responseText;
+	    }
+	  }
+	xmlhttp.open("GET","mostrar_tituloVideo.php?id="+id,true);
+	xmlhttp.send();	
+}
+
+function cargarDescripcion(id){
+	var xmlhttp;
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  	xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+	    {
+	    	document.getElementById("Descripcion").value=xmlhttp.responseText;
+	    }
+	  }
+	xmlhttp.open("GET","mostrar_descripcionVideo.php?id="+id,true);
+	xmlhttp.send();
 }
 
 </script>
@@ -100,7 +124,7 @@ xmlhttp.send();
 			<br/>
 			<br/>
 			Título: <input id="Titulo" type="text" name="titulo"><br/><br/>
-			Descripción: <br/><textarea rows = "5" cols = "70" name = "descripcion"></textarea><br/><br/>
+			Descripción: <br/><textarea id="Descripcion" rows = "5" cols = "70" name = "descripcion"></textarea><br/><br/>
          	Categoría: <select name = "categoria">
             <option value = "Workshop" onclick="habilitar(1)">Workshop</option>
             <option value = "Tutorial" onclick="habilitar(0)" selected>Tutorial</option>
@@ -108,7 +132,7 @@ xmlhttp.send();
          	Fecha: <input type="date" name="fecha" disabled><br/><br/>
          	Lugar: <input type="text" name="lugar" disabled><br/><br/>
          	URL Vídeo: <input type="text" name="url"><br/><br/>
-         	Publicado: <input type="checkbox" name="publicado" value="si">Sí <br/><br/>
+         	Publicado: <input type="checkbox" name="publicado">Sí <br/><br/>
          	<input type = "submit" name = "submit" value = "Actualizar" />			 	
 		</form>
 	</div>
