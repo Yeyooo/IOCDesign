@@ -201,7 +201,7 @@ function cargarDisponible(id){
 	<br/>
 	<h2>Actualizando Productos</h2>
 	<div>
-		<form name="productos" action="actualizar_producto.php" method="post">
+		<form enctype = "multipart/form-data" name="productos" action="actualizar_producto.php" method="post">
 			<?php 
 				$consulta_datos->execute();
 				$index = 1;
@@ -215,7 +215,7 @@ function cargarDisponible(id){
 			?>
 			<br/>
 			<br/>
-			ID Producto: <input type="text" name="id_producto"><br/><br/>
+			ID Producto: <input type="text" name="id_producto" readonly="true"><br/><br/>
 			Nombre Producto: <input id="Nombre" type="text" name="nombre"><br/><br/>
 			Descripción: <br/><textarea id ="Descripcion" rows = "5" cols = "70" name = "descripcion"></textarea><br/><br/>
          	Categoría: <input id="Categoria" type="text" name="categoria" disabled><br/><br/>

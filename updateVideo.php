@@ -53,9 +53,13 @@ function habilitar(value){
 }
 
 function cargarDatos(id){
-	
+	cargarID(id);
 	cargarTitulo(id);
 	cargarDescripcion(id);
+}
+
+function cargarID(id){
+	document.videos.id_video.value = id;
 }
 
 function cargarTitulo(id){
@@ -123,6 +127,7 @@ function cargarDescripcion(id){
 			?>
 			<br/>
 			<br/>
+			ID Video: <input type="text" name="id_video" readonly="true"><br/><br/>
 			Título: <input id="Titulo" type="text" name="titulo"><br/><br/>
 			Descripción: <br/><textarea id="Descripcion" rows = "5" cols = "70" name = "descripcion"></textarea><br/><br/>
          	Categoría: <select name = "categoria">
