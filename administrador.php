@@ -22,7 +22,7 @@
         <h3>Artículos</h3>
         <img src="Iconos/articulo.png">
         <p>Puede crear artículos con nuevas noticias y eliminar artículos que desee.</p>
-        <p><a href="addArticulo.html">Agregar Artículo</a><br/><a href="">Actualizar Artículo</a></p>
+        <p><a href="addArticulo.html">Agregar Artículo</a><br/><a href="updateArticulo.php">Actualizar Artículo</a></p>
       </div>
     <br/>
     <br/>
@@ -30,7 +30,7 @@
         <h3>Videos</h3>
         <img src="Iconos/videos.png">
         <p>Puede agregar y eliminar vídeos en la biblioteca.</p>
-        <p><a href="addVideo.html">Agregar Vídeo</a><br/><a href="">Actualizar Vídeo</a></p>
+        <p><a href="addVideo.html">Agregar Vídeo</a><br/><a href="updateVideo.php">Actualizar Vídeo</a></p>
       </div>
     </div>  
 
@@ -39,7 +39,7 @@
         <h3>Productos</h3>
         <img src="Iconos/productos.png">
         <p>Puede agregar y eliminar productos del catálogo.</p>
-        <p><a href="addProducto.html">Agregar Producto</a><br/><a href="">Actualizar Producto</a></p>
+        <p><a href="addProducto.html">Agregar Producto</a><br/><a href="updateProducto.php">Actualizar Producto</a></p>
       </div>
     <br/>
     <br/>
