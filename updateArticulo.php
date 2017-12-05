@@ -38,8 +38,8 @@ h2{
 }
 
 img{
-	width: 200px;
-	height: 200px;
+	width: 300px;
+	height: 300px;
 }
 </style>
 <script>
@@ -179,7 +179,7 @@ function cargarDisponible(id){
 	<br/>
 	<h2>Actualizando Artículos</h2>
 	<div>
-		<form name="articulos" action="actualizar_articulo.php" method="post">
+		<form enctype = "multipart/form-data" name="articulos" action="actualizar_articulo.php" method="post">
 			<?php 
 				$consulta_datos->execute();
 				$index = 1;
@@ -193,11 +193,11 @@ function cargarDisponible(id){
 			?>
 			<br/>
 			<br/>
-			ID Artículo: <input type="text" name="id_articulo"><br/><br/>
+			ID Artículo: <input type="text" name="id_articulo" readonly="true"><br/><br/>
 			Título: <input id="Titulo" type="text" name="titulo"><br/><br/>
 			Descripción: <br/><textarea id ="Descripcion" rows = "5" cols = "70" name = "descripcion"></textarea><br/><br/>
 			Texto: <br/><textarea id="Texto" rows = "20" cols = "70" name = "texto"></textarea><br/><br/>
-         	Imagen: <p id="Imagen"></p><input type = "file" name = "foto"/> <br/><br/>
+         	Imagen del Artículo: <p id="Imagen"></p><input type = "file" name = "foto"/> <br/><br/>
          	Publicado: <input id="Disponible" type="checkbox" name="publicado">Sí <br/><br/>
          	<input type = "submit" name = "submit" value = "Actualizar" />				 	
 		</form>

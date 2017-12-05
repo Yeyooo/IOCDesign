@@ -53,9 +53,14 @@ function habilitar(value){
 }
 
 function cargarDatos(id){
-	
+	cargarID(id);
 	cargarTitulo(id);
 	cargarDescripcion(id);
+	cargarDisponible(id);
+}
+
+function cargarID(id){
+	document.videos.id_video.value = id;
 }
 
 function cargarTitulo(id){
@@ -100,6 +105,35 @@ function cargarDescripcion(id){
 	xmlhttp.send();
 }
 
+function cargarDisponible(id){
+	var xmlhttp;
+	var disponible;
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  	xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	xmlhttp.onreadystatechange=function()
+	  {
+	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+	    {
+	    	var estado;
+	    	estado = xmlhttp.responseText;
+	    	if(estado=="true"){
+	    		disponible = true;
+	    	}else{
+	    		disponible = false;
+	    	}
+	    	document.videos.publicado.checked=disponible;
+	    }
+	  }
+	xmlhttp.open("GET","mostrar_disponibleVideo.php?id="+id,true);
+	xmlhttp.send();
+}
+
 </script>
 <body>
 	<br/>
@@ -123,6 +157,7 @@ function cargarDescripcion(id){
 			?>
 			<br/>
 			<br/>
+			ID Video: <input type="text" name="id_video" readonly="true"><br/><br/>
 			Título: <input id="Titulo" type="text" name="titulo"><br/><br/>
 			Descripción: <br/><textarea id="Descripcion" rows = "5" cols = "70" name = "descripcion"></textarea><br/><br/>
          	Categoría: <select name = "categoria">
