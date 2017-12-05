@@ -74,27 +74,9 @@ function cantidadVideos($conn){
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
         <div>
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Categorías
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Categoría 1</a>
-            <a class="dropdown-item" href="#">Categoría 2</a>
-            <a class="dropdown-item" href="#">Categoría 3</a>
-          </div>
-        </div>
+       
 
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Fecha
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Categoría 1</a>
-            <a class="dropdown-item" href="#">Categoría 2</a>
-            <a class="dropdown-item" href="#">Categoría 3</a>
-          </div>
-        </div>
+       
         </div>
 
       </nav>
