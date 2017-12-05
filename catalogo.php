@@ -21,7 +21,8 @@ function productosParametrizado($conn,$init,$page_size, $categoria){
 }
 
 function cantidadProductosParametrizada($conn, $categoria){
-  $consulta_productos = "SELECT * FROM producto p, categoria c WHERE p.id_categoria = c.id_categoria AND c.nombre = :categoria";
+  //$consulta_productos = "SELECT * FROM producto p, categoria c WHERE p.id_categoria = c.id_categoria AND c.nombre = :categoria";
+  $consulta_productos = "SELECT * FROM producto WHERE id_categoria =:categoria";
   $stm = $conn->prepare($consulta_productos);
   $stm->bindParam(':categoria', $categoria);
   $stm->execute();
@@ -54,7 +55,7 @@ function cantidadProductos($conn){
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
     <script src="jquery.youtubecoverphoto.js"></script>
   </head>
-  <body onload = "cargarCatalogo()">
+  <!--<body onload = "cargarCatalogo()"> -->
     <script>
             //SCRIPT DE FB COPIEN DESPUES DE BODY EN CUALQUIER WEA
           (function(d, s, id) {
@@ -150,10 +151,10 @@ function cantidadProductos($conn){
       </div>
       <!--Barra de Búsqueda-->
       <nav class="navbar">
- 
-          <input id="searchTxt" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick='searchCatalogo(document.getElementById("searchTxt").value)'">Search</button>
-        
+		<form method=get action=catalogo.php>
+        <input name="busqueda" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Search</button>		
+		</form>
         <div>
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -161,26 +162,28 @@ function cantidadProductos($conn){
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <?php 
+                $cantidad_productos=3;
+				$tamano_pagina = 1; //cantidad de productos a mostrar
+				$total_pages = ceil($cantidad_productos/$tamano_pagina);
+				if(isset($_GET['pages'])){
+				  $page = $_GET['pages'];
+				  $init = ($page-1)*$tamano_pagina;       
+				}else{
+				  $init = 0;
+				  $page = 1;        
+				}
+				
                 $consulta = $conn->prepare("SELECT * FROM categoria");
                 $consulta->execute();
                 while($categorias = $consulta->fetch()){
-                  echo "<button class = \"dropdown-item\" onclick=\"cargarCatalogoParametrizado(".$categorias['id_categoria'].")\">".$categorias['nombre']."</button>";
+                  echo "<a class = 'dropdown-item' href=catalogo.php?categoria=".$categorias['id_categoria'].">".$categorias['nombre']."</button>";
 
-                }
+                }	
            ?>
           </div>
         </div>
 
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Fecha
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Categoría 1</a>
-            <a class="dropdown-item" href="#">Categoría 2</a>
-            <a class="dropdown-item" href="#">Categoría 3</a>
-          </div>
-        </div>
+        
         </div>
 
       </nav>
@@ -194,7 +197,65 @@ function cantidadProductos($conn){
       <center>
           <div>
               <table id = "Centro">
+				<?php			
+				$tamano_pagina = 9; //cantidad de productos a mostrar
+				if(isset($_GET['pages'])){
+				  $page = $_GET['pages'];
+				  $init = ($page-1)*$tamano_pagina;       
+				}else{
+				  $init = 0;
+				  $page = 1;        
+				}						
+				if(isset($_GET['busqueda'])){
+					$busqueda = $_GET['busqueda']."%";					
+					$consulta_productos = "SELECT p.id_producto AS id,c.nombre AS categoria,p.id_categoria,  url, p.nombre from producto p, imagen i,categoria c WHERE p.id_imagen = i.id_imagen and p.nombre like :nombre AND c.id_categoria = p.id_categoria  LIMIT :init, :size";
+					$stm = $conn->prepare($consulta_productos);		
+					$stm->bindParam(':nombre',$busqueda);
+					$stm->bindParam(':init', $init, PDO::PARAM_INT);
+					$stm->bindParam(':size', $tamano_pagina, PDO::PARAM_INT);					
+				}		
+				else if((!isset($_GET['categoria']) && !isset($_GET['busqueda']))|| $_GET['categoria']==0 ){				
+					$categorias=0;
+					$consulta_productos = "SELECT p.id_producto AS id,c.nombre AS categoria, p.nombre, url, descripcion, precio FROM producto p, imagen i, categoria c WHERE p.id_categoria= c.id_categoria AND p.id_imagen = i.id_imagen LIMIT :init, :size";
+					$stm = $conn->prepare($consulta_productos);
+					$stm->bindParam(':init', $init, PDO::PARAM_INT);
+					$stm->bindParam(':size', $tamano_pagina, PDO::PARAM_INT);
+					$cantidad_productos = cantidadProductos($conn);					
+				}
+				else if(isset($_GET['categoria']) && $_GET['categoria']!=0){
+					$categorias = $_GET['categoria'];					
+					$consulta_productos = "SELECT p.id_producto AS id,c.nombre AS categoria, p.nombre, url, descripcion, precio FROM producto p, imagen i, categoria c WHERE p.id_categoria= c.id_categoria AND p.id_imagen = i.id_imagen AND c.id_categoria = :categoria LIMIT :init, :size";
+					$stm = $conn->prepare($consulta_productos);		
+					$stm->bindParam(':categoria',$categorias);
+					$stm->bindParam(':init', $init, PDO::PARAM_INT);
+					$stm->bindParam(':size', $tamano_pagina, PDO::PARAM_INT);
+					$cantidad_productos =cantidadProductosParametrizada($conn,$categorias);										
+				}	
+						
+				$total_pages = ceil($cantidad_productos/$tamano_pagina);  	
+				
+				
+				$stm->execute(); 				
+				$contador = 0;				
+				while($fila = $stm->fetch()){
+					if ($contador==0){
+						echo "<tr>";
+					}
+					echo "<td style='text-align:center';>
+						 <button type=\"button\" id=\"buttonCatalogo\" class=\"btn btn-secondary openBtn\" data-target=\"#catalogoModal\" data-toggle=\"modal\" data-container=\"body\"  data-placement=\"bottom\"  data-linkid=\"".$fila['id']."\">
+												  <img src='Productos/".$fila['nombre'].".jpg' width=\"300\" height=\"300\" >
+											</button>
+											<p><b>".$fila['nombre']."</b></p>
+											<p>Categoria: ".$fila['categoria']."</p>
+										  </td>";
 
+					$contador = $contador + 1;
+					if ($contador==3){
+					   $contador = 0;
+					echo "</tr>";
+					}
+				}
+				?>
               </table>    
           </div>
 
@@ -203,6 +264,27 @@ function cantidadProductos($conn){
   <div>
   <center>
     <table>
+	<?php
+	echo "<tr>";
+        if($total_pages > 1){
+			
+          if($page != 1){
+            echo '<a href=" '. 'catalogo.php?categoria='.$categorias.'&pages='.($page - 1).'"> Anterior </a>';
+          }
+          for($i=1;$i<=$total_pages;$i++){
+            if($page == $i){
+              echo "$page";
+            }
+            else{
+              echo '<a href=" '. 'catalogo.php?categoria='.$categorias.'&pages='.($i).'"> '. $i .' </a>';
+            }
+          }
+          if($page != $total_pages){
+            echo '<a href=" '.'catalogo.php?categoria='.$categorias.'&pages='.($page + 1).'"> Siguiente </a>';
+          }
+        }
+      echo "</tr>";
+	?>
     </table>
   </center>
   </div>
