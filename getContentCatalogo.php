@@ -26,7 +26,7 @@
                       </tr>
                       <tr>
                         <center>
-                        <img src='Productos/".$fila['nombre'].".jpg' id=img_modal width='450' height='450'>  
+                        <img src='Productos/".$fila['url']."' id=img_modal width='450' height='450'>  
                         </center>
                       </tr>
                       <tr>
